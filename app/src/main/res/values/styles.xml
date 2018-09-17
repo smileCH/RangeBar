@@ -1,0 +1,32 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="default_range_bar_value">
+        <item name="rect_line_height">5dp</item>
+        <item name="rect_line_default_color">#CDCDCD</item>
+        <item name="rect_line_checked_color">#275D9D</item>
+        <item name="circle_radius">10dp</item>
+        <item name="circle_stroke_width">2dp</item>
+        <item name="left_circle_solid_color">#D10773</item>
+        <item name="left_circle_stroke_color">#275D9D</item>
+        <item name="right_circle_solid_color">#4499FF</item>
+        <item name="right_circle_stroke_color">#275D9D</item>
+        <item name="range_text_size">16sp</item>
+        <item name="range_text_color">#333333</item>
+        <item name="view_text_space">10dp</item>
+        <item name="rect_price_desc_dialog_width">85dp</item>
+        <item name="rect_price_desc_dialog_color">#275D9D</item>
+        <item name="rect_price_desc_dialog_corner_radius">15dp</item>
+        <item name="rect_price_desc_text_size">12sp</item>
+        <item name="rect_price_desc_text_color">#FFFFFF</item>
+        <item name="rect_price_desc_space_to_progress">5dp</item>
+    </style>
+
+</resources>

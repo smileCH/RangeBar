@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="item_text_size">16sp</dimen>
+    <dimen name="rect_line_corner">5dp</dimen>
+    <dimen name="rect_line_height">10dp</dimen>
+    <dimen name="rect_line_width">100dp</dimen>
+    <dimen name="circle_radius">20dp</dimen>
+    <dimen name="circle_stroke_width">2dp</dimen>
+    <dimen name="view_and_text_space">10dp</dimen>
+    <dimen name="rect_dialog_width">200dp</dimen>
+    <dimen name="rect_dialog_corner_radius">50dp</dimen>
+    <dimen name="rect_dialog_text_size">12sp</dimen>
+    <dimen name="rect_dialog_space_to_progress">5dp</dimen>
+</resources>
