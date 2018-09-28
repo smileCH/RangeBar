@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
         rangeBarView = (RangeBarView) findViewById(R.id.view_range_bar);
 
         int minValue = 0;
-        int maxValue = 100;
-        int sliceValue = 20;
+        int maxValue = 7000;
+        int sliceValue = 1000;
         tvLeftValue.setText(minValue+"");
         tvRightValue.setText(maxValue+"");
         rangeBarView.setDatas(minValue, maxValue, sliceValue, new RangeBarView.OnMoveValueListener() {

@@ -73,7 +73,7 @@ public class RangeBarView extends View{
     //默认分成10份
     private int slice = 10;
     //表示每一份所占的距离长度
-    private int perSlice;
+    private float perSlice;
     //最大值，默认为100
     private int maxValue = 100;
     //最小值，默认为0
@@ -225,8 +225,8 @@ public class RangeBarView extends View{
 
     private class CirclePoint{
         //圆的圆心坐标
-        public int cx;
-        public int cy;
+        public float cx;
+        public float cy;
     }
 
     @Override
@@ -293,7 +293,10 @@ public class RangeBarView extends View{
         numberDescRect.right = w / 2 + rectDialogWidth/2;
         numberDescRect.bottom = getPaddingTop() + rectDialogCornerRadius*2;
         //每一份对应的距离
-        perSlice = (realWidth - strokeRadius*2) / slice;
+        //2018/9/28更新  有同学提出bug，说分的份数很大的时候出现问题，其实原因就是之前我用的是int型，除不整的就舍去了，导致每一份的距离都减少了
+        //所以将每一份所占的距离长度perSlice改成float浮点型
+        perSlice = (realWidth - strokeRadius*2) * 1f / slice;
+        Log.e("TAG", "onSizeChanged---perSlice："+perSlice);
     }
 
     @Override
@@ -434,15 +437,18 @@ public class RangeBarView extends View{
                 break;
             case MotionEvent.ACTION_UP:
                 if (touchLeftCircle) {
-                    int partsOfLeft = getSliceByCoordinate((int) event.getX());
-                    leftCircleObj.cx = leftCircleObj.cx - rightCircleObj.cx >= 0 ? rightCircleObj.cx : partsOfLeft*perSlice+strokeRadius;
+                    //2018/9/28更新  每一步的距离 = 有效的长度(即实际矩形线长度范围内) / 步数，
+                    // 所以这个有效的距离应该是移动的坐标距离(event.getX())减去左内边距以及strokeRadius，减去之后剩下的距离才是在矩形线上真正体现出来的间距，（有点绕，自己多理解下就想通了）
+                    int partsOfLeft = getSliceByCoordinate((int) event.getX() - getPaddingLeft() - strokeRadius);
+                    //最终计算圆心的坐标位置的时候还是需要加上这些的，因为坐标原点是此控件view的左上角
+                    leftCircleObj.cx = leftCircleObj.cx - rightCircleObj.cx >= 0 ? rightCircleObj.cx : partsOfLeft*perSlice+strokeRadius+getPaddingLeft();
                 }else {
-                    int partsOfRight = getSliceByCoordinate((int) event.getX());
-                    rightCircleObj.cx = rightCircleObj.cx - leftCircleObj.cx <= 0 ? leftCircleObj.cx : partsOfRight*perSlice+strokeRadius;
+                    int partsOfRight = getSliceByCoordinate((int) event.getX() - getPaddingLeft() - strokeRadius);
+                    rightCircleObj.cx = rightCircleObj.cx - leftCircleObj.cx <= 0 ? leftCircleObj.cx : partsOfRight*perSlice+strokeRadius+getPaddingLeft();
                 }
 
-                int leftData = getSliceByCoordinate(leftCircleObj.cx)*sliceValue + minValue;
-                int rightData = getSliceByCoordinate(rightCircleObj.cx)*sliceValue + minValue;
+                int leftData = getSliceByCoordinate(leftCircleObj.cx - getPaddingLeft() - strokeRadius)*sliceValue + minValue;
+                int rightData = getSliceByCoordinate(rightCircleObj.cx - getPaddingLeft() - strokeRadius)*sliceValue + minValue;
                 leftValue = leftData > maxValue ? maxValue : leftData;
                 rightValue = rightData > maxValue ? maxValue : rightData;
                 //回调
@@ -475,9 +481,6 @@ public class RangeBarView extends View{
                 if (rightCircleObj.cx < getPaddingLeft() + strokeRadius) {
                     rightCircleObj.cx = getPaddingLeft() + strokeRadius;
                 }
-
-
-
             }
         }
 
@@ -492,13 +495,14 @@ public class RangeBarView extends View{
         return true;
     }
 
-    private int getSliceByCoordinate(int moveDistance){
+    private int getSliceByCoordinate(float moveDistance){
         //此位置坐标对应的距离能分多少份
-        int parts = moveDistance / perSlice;//总距离 / 每一份的距离
+        moveDistance = moveDistance <= 0 ? 0 : (moveDistance >= getWidth() ? getWidth() : moveDistance);
+        int parts = (int) (moveDistance / perSlice);//总距离 / 每一份的距离
         parts = moveDistance % perSlice >= perSlice/2 ? parts + 1 : parts;
-        Log.e("TAG", "左边-----> moveDistance："+ moveDistance);
-        Log.e("TAG", "左边-----> perSlice："+ perSlice);
-        Log.e("TAG", "左边-----> parts："+ parts);
+        Log.e("TAG", "左边aaa-----> moveDistance："+ moveDistance);
+        Log.e("TAG", "左边aaa-----> perSlice："+ perSlice);
+        Log.e("TAG", "左边aaa-----> parts："+ parts);
         return parts > slice ? slice : parts;
     }
 

@@ -46,8 +46,8 @@
         app:circle_stroke_width="2dp"
         app:circle_radius="15dp"
         app:rect_line_height="3dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         />
 
 </LinearLayout>
