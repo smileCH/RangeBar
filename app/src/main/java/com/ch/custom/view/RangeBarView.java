@@ -497,7 +497,8 @@ public class RangeBarView extends View{
 
     private int getSliceByCoordinate(float moveDistance){
         //此位置坐标对应的距离能分多少份
-        moveDistance = moveDistance <= 0 ? 0 : (moveDistance >= getWidth() ? getWidth() : moveDistance);
+        int lineLength = getWidth()-getPaddingLeft()-getPaddingRight()-strokeRadius*2;
+        moveDistance = moveDistance <= 0 ? 0 : (moveDistance >= lineLength ? lineLength : moveDistance);
         int parts = (int) (moveDistance / perSlice);//总距离 / 每一份的距离
         parts = moveDistance % perSlice >= perSlice/2 ? parts + 1 : parts;
         Log.e("TAG", "左边aaa-----> moveDistance："+ moveDistance);
