@@ -507,6 +507,27 @@ public class RangeBarView extends View{
         return parts > slice ? slice : parts;
     }
 
+    /** 通过外界传值让小圆自动移动到相应数值对应的坐标处 **/
+    public void setCircleMoveCoordinateByValue(int minData, int maxData){
+        if (minData < minValue) minData = minValue;
+        if (maxData > maxValue) maxData = maxValue;
+        //占了多少份
+        int sliceL = (minData - minValue) / sliceValue;
+        int sliceR = (maxData - minValue) / sliceValue;
+        sliceL = (minData - minValue) % sliceValue == 0 ? sliceL : sliceL + 1;
+        sliceR = (maxData - minValue) % sliceValue == 0 ? sliceR : sliceR + 1;
+        //左边圆的圆心坐标 = minData所占的份数 * 每一份的坐标距离 + getPaddingLeft() + circleRadius
+        leftCircleObj.cx = sliceL * perSlice + getPaddingLeft() + circleRadius;
+        rightCircleObj.cx = sliceR * perSlice + getPaddingLeft() + circleRadius;
+        //设置线的位置
+        selectedCornerLineRect.left = leftCircleObj.cx;
+        selectedCornerLineRect.right = rightCircleObj.cx;
+        //设置顶部价格弹窗位置
+        numberDescRect.left = (rightCircleObj.cx + leftCircleObj.cx) / 2 - rectDialogWidth/2;
+        numberDescRect.right = (rightCircleObj.cx + leftCircleObj.cx) / 2 + rectDialogWidth/2;
+        invalidate();
+    }
+
     private boolean checkIsLeftOrRight(float downX) {
         //如果按下的区域位于左边区域，则按下坐标downX的值就会比较小(即按下坐标点在左边)，那么leftCircleObj.cx - downX的绝对值也会比较小
         //rightCircleObj.cx - downX绝对值肯定是大于leftCircleObj.cx - downX绝对值的，两者相减肯定是小于0的
